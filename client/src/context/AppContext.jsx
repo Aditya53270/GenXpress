@@ -59,6 +59,98 @@ export const AppProvider = ({children}) => {
     }
 
   }
+
+  const enhanceUserPrompt = async (prompt) => {
+    try {
+      const { data } = await axios.post(
+        `${backendUrl}/api/enhance-prompt`,
+        { prompt },
+        { headers: { token } }
+      );
+
+      if (data.success) return data.enhancedPrompt;
+      toast.error(data.message);
+      return '';
+    } catch (error) {
+      toast.error(error.message);
+      return '';
+    }
+  };
+
+  const generateContent = async (prompt, usePromptEnhancer, enhancedPrompt = '') => {
+    try {
+      const { data } = await axios.post(
+        `${backendUrl}/api/generate-content`,
+        { prompt, usePromptEnhancer, enhancedPrompt },
+        { headers: { token } }
+      );
+
+      if (data.success) {
+        loadCreditsData();
+        return data;
+      }
+
+      toast.error(data.message);
+      loadCreditsData();
+      if (data.creditBalance === 0) navigate('/Buycredit');
+      return null;
+    } catch (error) {
+      toast.error(error.message);
+      return null;
+    }
+  };
+
+  const scheduleGeneratedContent = async (payload) => {
+    try {
+      const { data } = await axios.post(`${backendUrl}/api/schedule`, payload, {
+        headers: { token },
+      });
+
+      if (data.success) {
+        toast.success('Post scheduled successfully');
+        return true;
+      }
+
+      toast.error(data.message);
+      return false;
+    } catch (error) {
+      toast.error(error.message);
+      return false;
+    }
+  };
+
+  const fetchScheduledContent = async () => {
+    try {
+      const { data } = await axios.get(`${backendUrl}/api/schedule`, {
+        headers: { token },
+      });
+
+      if (data.success) {
+        return data.schedules;
+      }
+
+      toast.error(data.message);
+      return [];
+    } catch (error) {
+      toast.error(error.message);
+      return [];
+    }
+  };
+
+  const generateTextDraft = async (payload) => {
+    try {
+      const { data } = await axios.post(`${backendUrl}/api/generate-text`, payload, {
+        headers: { token },
+      });
+
+      if (data.success) return data.draft;
+      toast.error(data.message);
+      return '';
+    } catch (error) {
+      toast.error(error.message);
+      return '';
+    }
+  };
   const logout=()=>{
     localStorage.removeItem('token');
     setToken();
@@ -83,6 +175,11 @@ export const AppProvider = ({children}) => {
     loadCreditsData,
     logout,
     generateImage,
+    enhanceUserPrompt,
+    generateContent,
+    scheduleGeneratedContent,
+    fetchScheduledContent,
+    generateTextDraft,
   };
   
   return (

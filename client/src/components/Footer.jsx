@@ -3,13 +3,23 @@ import { assets } from '../assets/assets';
 
 const Footer = () => {
   return (
-    <footer className="flex flex-col items-center justify-center gap-6 bg-gray-100 p-8 text-center">
-      {/* Logo */}
-      <img src={assets.imagingo1} alt="Imagingo " className="w-36 h-auto" />
+    <footer className="flex flex-col items-center justify-center gap-6 bg-white border border-zinc-200 rounded-2xl p-8 text-center mt-14 shadow-sm">
+      {/* Logo + Brand */}
+      <div className="flex items-center gap-3">
+        <img
+          src={assets.genxpressLogo}
+          alt="GenXpress"
+          className="w-14 h-14 object-cover rounded-full border border-zinc-300"
+        />
+        <div className="text-left">
+          <p className="text-2xl font-extrabold tracking-tight text-zinc-900">GenXpress</p>
+          <p className="text-xs text-zinc-500 -mt-1">AI Content Creation Platform</p>
+        </div>
+      </div>
 
       {/* Copyright */}
-      <p className="text-sm text-gray-600">
-        © 2025 IMAGINGO — All rights reserved.
+      <p className="text-sm text-zinc-500">
+        © 2025 GenXpress — All rights reserved.
       </p>
 
       {/* Social Icons */}
